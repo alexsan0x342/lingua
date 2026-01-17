@@ -60,7 +60,7 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
       const response = await fetch(`/api/admin/assignments?lessonId=${lessonId}`);
       if (response.ok) {
         const data = await response.json();
-        setAssignments(data);
+        setAssignments(data.assignments || []);
       }
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
