@@ -81,9 +81,9 @@ export async function POST(request: NextRequest) {
       include: {
         lesson: {
           include: {
-            section: {
+            Chapter: {
               include: {
-                course: true,
+                Course: true,
               },
             },
           },
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     const enrollment = await prisma.enrollment.findFirst({
       where: {
         userId: session.user.id,
-        courseId: assignment.lesson.section.courseId,
+        courseId: assignment.lesson.Chapter.courseId,
       },
     });
 
