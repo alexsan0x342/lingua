@@ -4,7 +4,9 @@ import { Resend } from "resend";
 const resendApiKey = process.env.SMTP_PASS || process.env.RESEND_API_KEY;
 
 if (!resendApiKey) {
-  console.warn("[Resend] No API key found. Set RESEND_API_KEY or SMTP_PASS environment variable.");
+  console.warn(
+    "[Resend] No API key found. Set RESEND_API_KEY or SMTP_PASS environment variable.",
+  );
 }
 
 // Create Resend client
