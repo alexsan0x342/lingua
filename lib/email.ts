@@ -373,10 +373,13 @@ export async function sendBulkEmail(data: BulkEmailData) {
   try {
     // Check for SMTP configuration
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.error("SMTP credentials not configured - SMTP_USER or SMTP_PASS missing");
+      console.error(
+        "SMTP credentials not configured - SMTP_USER or SMTP_PASS missing",
+      );
       return {
         success: false,
-        error: "SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS environment variables.",
+        error:
+          "SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS environment variables.",
         sent: 0,
         failed: data.recipients.length,
         total: data.recipients.length,
@@ -424,9 +427,13 @@ export async function sendBulkEmail(data: BulkEmailData) {
     const batchSize = 50;
     const results = [];
 
-    console.log(`[Email] Sending bulk email to ${data.recipients.length} recipients`);
+    console.log(
+      `[Email] Sending bulk email to ${data.recipients.length} recipients`,
+    );
     console.log(`[Email] Subject: ${data.subject}`);
-    console.log(`[Email] From: ${env.FROM_EMAIL || `${siteSettings.site_name} <noreply@lingua-ly.com>`}`);
+    console.log(
+      `[Email] From: ${env.FROM_EMAIL || `${siteSettings.site_name} <noreply@lingua-ly.com>`}`,
+    );
 
     for (let i = 0; i < data.recipients.length; i += batchSize) {
       const batch = data.recipients.slice(i, i + batchSize);
@@ -443,16 +450,22 @@ export async function sendBulkEmail(data: BulkEmailData) {
       );
 
       const batchResults = await Promise.allSettled(batchPromises);
-      
+
       // Log any failures
       batchResults.forEach((result, idx) => {
         if (result.status === "rejected") {
-          console.error(`[Email] Failed to send to ${batch[idx]?.email}:`, result.reason);
+          console.error(
+            `[Email] Failed to send to ${batch[idx]?.email}:`,
+            result.reason,
+          );
         } else if (result.value?.error) {
-          console.error(`[Email] Error sending to ${batch[idx]?.email}:`, result.value.error);
+          console.error(
+            `[Email] Error sending to ${batch[idx]?.email}:`,
+            result.value.error,
+          );
         }
       });
-      
+
       results.push(...batchResults);
 
       // Add a small delay between batches
@@ -461,10 +474,16 @@ export async function sendBulkEmail(data: BulkEmailData) {
       }
     }
 
-    const successful = results.filter((r) => r.status === "fulfilled" && !r.value?.error).length;
-    const failed = results.filter((r) => r.status === "rejected" || r.value?.error).length;
+    const successful = results.filter(
+      (r) => r.status === "fulfilled" && !r.value?.error,
+    ).length;
+    const failed = results.filter(
+      (r) => r.status === "rejected" || r.value?.error,
+    ).length;
 
-    console.log(`[Email] Bulk email complete: ${successful} sent, ${failed} failed`);
+    console.log(
+      `[Email] Bulk email complete: ${successful} sent, ${failed} failed`,
+    );
 
     return {
       success: successful > 0,
