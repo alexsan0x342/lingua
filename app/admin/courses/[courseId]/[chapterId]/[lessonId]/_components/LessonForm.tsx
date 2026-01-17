@@ -59,21 +59,20 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
           <CardHeader className="text-center">
             <CardTitle>Invalid Lesson Data</CardTitle>
             <CardDescription>
-              The lesson data is missing or corrupted. Please try refreshing the page.
+              The lesson data is missing or corrupted. Please try refreshing the
+              page.
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <Button asChild>
-              <Link href="/admin/courses">
-                Back to Courses
-              </Link>
+              <Link href="/admin/courses">Back to Courses</Link>
             </Button>
           </CardContent>
         </Card>
       </div>
     );
   }
-  
+
   const form = useForm<LessonSchemaType>({
     resolver: zodResolver(lessonSchema),
     defaultValues: {
@@ -97,7 +96,7 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
     },
     onError: (error) => {
       toast.error(error || "Failed to delete lesson");
-    }
+    },
   });
 
   const fetchResources = async () => {
@@ -120,7 +119,7 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
   function onSubmit(values: LessonSchemaType) {
     startTransition(async () => {
       const { data: result, error } = await tryCatch(
-        updateLesson(values, data.id)
+        updateLesson(values, data.id),
       );
 
       if (error) {
@@ -145,13 +144,12 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
         <span>Go Back</span>
       </Link>
 
-        <Tabs defaultValue="details" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="details">Lesson Details</TabsTrigger>
-            <TabsTrigger value="assignments">
-              Assignments & Resources
-            </TabsTrigger>
-          </TabsList>        <TabsContent value="details">
+      <Tabs defaultValue="details" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="details">Lesson Details</TabsTrigger>
+          <TabsTrigger value="assignments">Assignments & Resources</TabsTrigger>
+        </TabsList>{" "}
+        <TabsContent value="details">
           <Card>
             <CardHeader>
               <CardTitle>Lesson Configuration</CardTitle>
@@ -161,7 +159,10 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
             </CardHeader>
             <CardContent>
               <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
                   <FormField
                     control={form.control}
                     name="name"
@@ -187,7 +188,8 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
                             Free Preview
                           </FormLabel>
                           <FormDescription>
-                            Make this lesson available for free preview without purchase
+                            Make this lesson available for free preview without
+                            purchase
                           </FormDescription>
                         </div>
                         <FormControl>
@@ -254,7 +256,7 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
                     <Button disabled={pending} type="submit">
                       {pending ? "Saving.." : "Save Lesson"}
                     </Button>
-                    
+
                     <Button
                       type="button"
                       variant="destructive"
@@ -271,7 +273,6 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
             </CardContent>
           </Card>
         </TabsContent>
-
         <TabsContent value="assignments">
           <div className="space-y-6">
             <Card>
@@ -282,9 +283,7 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
-                <AssignmentManager
-                  lessonId={data.id}
-                />
+                <AssignmentManager lessonId={data.id} />
               </CardContent>
             </Card>
 
