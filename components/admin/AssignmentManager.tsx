@@ -68,11 +68,14 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
       );
       if (response.ok) {
         const data = await response.json();
-        setAssignments(data.assignments || []);
+        setAssignments(Array.isArray(data.assignments) ? data.assignments : []);
+      } else {
+        setAssignments([]);
       }
     } catch (error) {
       console.error("Failed to fetch assignments:", error);
       toast.error("Failed to fetch assignments");
+      setAssignments([]);
     } finally {
       setLoading(false);
     }
