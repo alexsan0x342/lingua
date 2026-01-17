@@ -411,7 +411,7 @@ export async function sendBulkEmail(data: BulkEmailData) {
     // Send emails sequentially with delay to avoid Resend rate limits (2/sec on free tier)
     const results: Array<{
       status: "fulfilled" | "rejected";
-      value?: { error?: { message: string } };
+      value?: { data?: { id?: string }; error?: { message: string } | null };
       reason?: string;
       email: string;
     }> = [];
