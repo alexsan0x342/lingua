@@ -116,10 +116,19 @@ export async function POST(request: NextRequest) {
     // Handle file upload if present
     let fileKey: string | null = null;
     if (file && file.size > 0) {
-      // Dynamic import to avoid issues if file-storage is not configured
-      const { uploadFile } = await import("@/lib/file-storage");
-      const result = await uploadFile(file, `submissions/${session.user.id}`);
-      fileKey = result.key;
+      const { saveAssignmentFile } = await import("@/lib/file-storage");
+      const result = await saveAssignmentFile(
+        file,
+        session.user.id,
+        assignmentId,
+      );
+      if (!result.success) {
+        return NextResponse.json(
+          { error: result.error || "Failed to upload file" },
+          { status: 400 },
+        );
+      }
+      fileKey = result.fileKey || null;
     }
 
     // Create or update the submission

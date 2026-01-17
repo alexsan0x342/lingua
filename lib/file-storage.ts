@@ -146,7 +146,7 @@ export function isValidFileKey(fileKey: string): boolean {
   }
   
   // First part should be a valid prefix
-  const validPrefixes = ['assignments', 'resources', 'lesson', 'course', 'logo', 'favicon'];
+  const validPrefixes = ['assignments', 'resources', 'lesson', 'course', 'logo', 'favicon', 'submissions'];
   if (!validPrefixes.includes(parts[0])) {
     return false;
   }
