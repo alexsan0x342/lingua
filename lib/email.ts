@@ -408,9 +408,8 @@ export async function sendBulkEmail(data: BulkEmailData) {
       </html>
     `;
 
-    // Send emails in batches to avoid rate limiting
-    const batchSize = 50;
-    const results = [];
+    // Send emails sequentially with delay to avoid Resend rate limits (2/sec on free tier)
+    const results: Array<{ status: "fulfilled" | "rejected"; value?: { error?: { message: string } }; reason?: string; email: string }> = [];
 
     console.log(
       `[Email] Sending bulk email to ${data.recipients.length} recipients`,
@@ -420,42 +419,34 @@ export async function sendBulkEmail(data: BulkEmailData) {
       `[Email] From: ${env.FROM_EMAIL || `${siteSettings.site_name} <noreply@lingua-ly.com>`}`,
     );
 
-    for (let i = 0; i < data.recipients.length; i += batchSize) {
-      const batch = data.recipients.slice(i, i + batchSize);
-
-      const batchPromises = batch.map((recipient) =>
-        resend.emails.send({
+    for (const recipient of data.recipients) {
+      try {
+        const result = await resend.emails.send({
           from:
             env.FROM_EMAIL ||
             `${siteSettings.site_name} <noreply@lingua-ly.com>`,
           to: recipient.email,
           subject: data.subject,
           html: emailContent.replace("{{name}}", recipient.name),
-        }),
-      );
+        });
 
-      const batchResults = await Promise.allSettled(batchPromises);
-
-      // Log any failures
-      batchResults.forEach((result, idx) => {
-        if (result.status === "rejected") {
-          console.error(
-            `[Email] Failed to send to ${batch[idx]?.email}:`,
-            result.reason,
-          );
-        } else if (result.value?.error) {
-          console.error(
-            `[Email] Error sending to ${batch[idx]?.email}:`,
-            result.value.error,
-          );
+        if (result.error) {
+          console.error(`[Email] Error sending to ${recipient.email}:`, result.error);
+          results.push({ status: "rejected", reason: result.error.message, email: recipient.email });
+        } else {
+          console.log(`[Email] Sent to ${recipient.email}`);
+          results.push({ status: "fulfilled", value: result, email: recipient.email });
         }
-      });
 
-      results.push(...batchResults);
-
-      // Add a small delay between batches
-      if (i + batchSize < data.recipients.length) {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Add delay between emails to respect rate limits (500ms = 2 emails/sec)
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      } catch (error) {
+        console.error(`[Email] Exception sending to ${recipient.email}:`, error);
+        results.push({ 
+          status: "rejected", 
+          reason: error instanceof Error ? error.message : "Unknown error",
+          email: recipient.email 
+        });
       }
     }
 
