@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     if (!lessonId) {
       return NextResponse.json(
         { error: "Lesson ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching submissions:", error);
     return NextResponse.json(
       { error: "Failed to fetch submissions" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     if (!assignmentId) {
       return NextResponse.json(
         { error: "Assignment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     if (!assignment) {
       return NextResponse.json(
         { error: "Assignment not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     if (!enrollment) {
       return NextResponse.json(
         { error: "You must be enrolled in this course to submit assignments" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -152,7 +152,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating submission:", error);
     return NextResponse.json(
       { error: "Failed to create submission" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -180,7 +180,7 @@ export async function PATCH(request: NextRequest) {
     if (!submissionId) {
       return NextResponse.json(
         { error: "Submission ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -196,7 +196,7 @@ export async function PATCH(request: NextRequest) {
     if (!currentSubmission) {
       return NextResponse.json(
         { error: "Submission not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -231,7 +231,7 @@ export async function PATCH(request: NextRequest) {
     console.error("Error updating submission:", error);
     return NextResponse.json(
       { error: "Failed to update submission" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
