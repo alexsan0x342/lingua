@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'VideoJS';
+  src: url('/fonts/VideoJS.woff') format('woff'),
+       url('/fonts/VideoJS.ttf') format('truetype'),
+       url('/fonts/VideoJS.svg#VideoJS') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
