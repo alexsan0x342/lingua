@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get all lessons in the course
-    const sections = await prisma.section.findMany({
+    // Get all chapters in the course
+    const chapters = await prisma.chapter.findMany({
       where: { courseId },
       include: {
         lessons: {
@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
     let earnedPoints = 0;
     let maxPoints = 0;
 
-    for (const section of sections) {
-      for (const lesson of section.lessons) {
+    for (const chapter of chapters) {
+      for (const lesson of chapter.lessons) {
         for (const assignment of lesson.assignments) {
           if (assignment.maxPoints) {
             maxPoints += assignment.maxPoints;
