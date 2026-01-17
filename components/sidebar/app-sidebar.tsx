@@ -89,11 +89,6 @@ const getAdminData = (t: (key: string) => string) => ({
       icon: IconGift,
     },
     {
-      title: t("navigation.costs"),
-      url: "/admin/costs",
-      icon: IconReceipt,
-    },
-    {
       title: t("navigation.liveLessons"),
       url: "/admin/live-lessons",
       icon: IconVideo,
