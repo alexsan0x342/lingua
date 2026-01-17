@@ -4,7 +4,13 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Plus } from "lucide-react";
@@ -57,7 +63,9 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
 
   const fetchAssignments = async () => {
     try {
-      const response = await fetch(`/api/admin/assignments?lessonId=${lessonId}`);
+      const response = await fetch(
+        `/api/admin/assignments?lessonId=${lessonId}`,
+      );
       if (response.ok) {
         const data = await response.json();
         setAssignments(data.assignments || []);
@@ -72,7 +80,7 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim()) {
       toast.error("Title is required");
       return;
@@ -90,10 +98,10 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
         dueDate: formData.dueDate || null,
       };
 
-      const url = editing 
+      const url = editing
         ? `/api/admin/assignments/${editing}`
         : "/api/admin/assignments";
-      
+
       const method = editing ? "PUT" : "POST";
 
       const response = await fetch(url, {
@@ -135,7 +143,9 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
       submissionType: assignment.submissionType,
       instructions: assignment.instructions,
       maxPoints: assignment.maxPoints?.toString() || "",
-      dueDate: assignment.dueDate ? assignment.dueDate.toString().split('T')[0] : "",
+      dueDate: assignment.dueDate
+        ? assignment.dueDate.toString().split("T")[0]
+        : "",
       isRequired: assignment.isRequired,
       fileRequired: assignment.fileRequired,
     });
@@ -186,8 +196,8 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-semibold">Assignments</h3>
-        <Button 
-          onClick={() => setShowForm(true)} 
+        <Button
+          onClick={() => setShowForm(true)}
           size="sm"
           disabled={showForm || submitting}
         >
@@ -199,44 +209,65 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>{editing ? "Edit Assignment" : "Add New Assignment"}</CardTitle>
+            <CardTitle>
+              {editing ? "Edit Assignment" : "Add New Assignment"}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Title *</label>
+                <label className="block text-sm font-medium mb-1">
+                  Title *
+                </label>
                 <Input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
                   placeholder="Assignment title"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
+                <label className="block text-sm font-medium mb-1">
+                  Description
+                </label>
                 <Textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Assignment description"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Instructions *</label>
+                <label className="block text-sm font-medium mb-1">
+                  Instructions *
+                </label>
                 <Textarea
                   value={formData.instructions}
-                  onChange={(e) => setFormData({ ...formData, instructions: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, instructions: e.target.value })
+                  }
                   placeholder="Detailed instructions for students"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Submission Type</label>
-                <Select 
-                  value={formData.submissionType} 
-                  onValueChange={(value) => setFormData({ ...formData, submissionType: value as AssignmentType })}
+                <label className="block text-sm font-medium mb-1">
+                  Submission Type
+                </label>
+                <Select
+                  value={formData.submissionType}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      submissionType: value as AssignmentType,
+                    })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -251,21 +282,29 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Max Points</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Max Points
+                  </label>
                   <Input
                     type="number"
                     value={formData.maxPoints}
-                    onChange={(e) => setFormData({ ...formData, maxPoints: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, maxPoints: e.target.value })
+                    }
                     placeholder="Optional"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-1">Due Date</label>
+                  <label className="block text-sm font-medium mb-1">
+                    Due Date
+                  </label>
                   <Input
                     type="date"
                     value={formData.dueDate}
-                    onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, dueDate: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -274,19 +313,24 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
                 <Checkbox
                   id="isRequired"
                   checked={formData.isRequired}
-                  onCheckedChange={(checked) => setFormData({ ...formData, isRequired: !!checked })}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, isRequired: !!checked })
+                  }
                 />
                 <label htmlFor="isRequired" className="text-sm font-medium">
                   Required Assignment
                 </label>
               </div>
 
-              {(formData.submissionType === 'file' || formData.submissionType === 'both') && (
+              {(formData.submissionType === "file" ||
+                formData.submissionType === "both") && (
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="fileRequired"
                     checked={formData.fileRequired}
-                    onCheckedChange={(checked) => setFormData({ ...formData, fileRequired: !!checked })}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, fileRequired: !!checked })
+                    }
                   />
                   <label htmlFor="fileRequired" className="text-sm font-medium">
                     File Upload Required
@@ -302,12 +346,15 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
                       {editing ? "Updating..." : "Creating..."}
                     </>
                   ) : (
-                    <>
-                      {editing ? "Update" : "Create"} Assignment
-                    </>
+                    <>{editing ? "Update" : "Create"} Assignment</>
                   )}
                 </Button>
-                <Button type="button" variant="outline" onClick={cancelEdit} disabled={submitting}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={cancelEdit}
+                  disabled={submitting}
+                >
                   Cancel
                 </Button>
               </div>
@@ -331,30 +378,41 @@ function AssignmentManager({ lessonId }: AssignmentManagerProps) {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       <h4 className="font-medium">{assignment.title}</h4>
-                      <Badge variant={assignment.submissionType === "text" ? "default" : assignment.submissionType === "file" ? "secondary" : "outline"}>
+                      <Badge
+                        variant={
+                          assignment.submissionType === "text"
+                            ? "default"
+                            : assignment.submissionType === "file"
+                              ? "secondary"
+                              : "outline"
+                        }
+                      >
                         {assignment.submissionType}
                       </Badge>
                       {assignment.isRequired && (
                         <Badge variant="destructive">Required</Badge>
                       )}
                     </div>
-                    
+
                     {assignment.description && (
                       <p className="text-sm text-muted-foreground mb-1">
                         {assignment.description}
                       </p>
                     )}
-                    
+
                     <div className="text-xs text-muted-foreground space-y-1">
                       {assignment.maxPoints && (
                         <div>Max Points: {assignment.maxPoints}</div>
                       )}
                       {assignment.dueDate && (
-                        <div>Due: {new Date(assignment.dueDate).toLocaleDateString()}</div>
+                        <div>
+                          Due:{" "}
+                          {new Date(assignment.dueDate).toLocaleDateString()}
+                        </div>
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex gap-1">
                     <Button
                       size="sm"
