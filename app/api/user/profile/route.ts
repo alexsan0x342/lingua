@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching user profile:", error);
     return NextResponse.json(
       { error: "Failed to fetch user profile" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -75,7 +75,7 @@ export async function PUT(request: NextRequest) {
     console.error("Error updating user profile:", error);
     return NextResponse.json(
       { error: "Failed to update user profile" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

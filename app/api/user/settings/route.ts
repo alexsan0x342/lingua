@@ -41,9 +41,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       settings: settings
         ? {
-            notifications: (settings.notifications as any) || defaultSettings.notifications,
+            notifications:
+              (settings.notifications as any) || defaultSettings.notifications,
             privacy: (settings.privacy as any) || defaultSettings.privacy,
-            preferences: (settings.preferences as any) || defaultSettings.preferences,
+            preferences:
+              (settings.preferences as any) || defaultSettings.preferences,
           }
         : defaultSettings,
     });
@@ -51,7 +53,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching user settings:", error);
     return NextResponse.json(
       { error: "Failed to fetch user settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -91,7 +93,7 @@ export async function PUT(request: NextRequest) {
     console.error("Error updating user settings:", error);
     return NextResponse.json(
       { error: "Failed to update user settings" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
