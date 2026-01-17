@@ -1,29 +1,16 @@
-import nodemailer from "nodemailer";
-import { env } from "./env";
+import { Resend } from "resend";
 
-// SMTP Configuration
-const smtpHost = env.SMTP_HOST || process.env.SMTP_HOST || "smtp.gmail.com";
-const smtpPort = parseInt(env.SMTP_PORT || process.env.SMTP_PORT || "587");
-const smtpSecure =
-  (env.SMTP_SECURE || process.env.SMTP_SECURE || "false") === "true";
-const smtpUser = env.SMTP_USER || process.env.SMTP_USER;
-const smtpPass = env.SMTP_PASS || process.env.SMTP_PASS;
+// Initialize Resend with API key
+const resendApiKey = process.env.SMTP_PASS || process.env.RESEND_API_KEY;
 
-// Create SMTP transporter
-export const transporter = nodemailer.createTransport({
-  host: smtpHost,
-  port: smtpPort,
-  secure: smtpSecure,
-  auth:
-    smtpUser && smtpPass
-      ? {
-          user: smtpUser,
-          pass: smtpPass,
-        }
-      : undefined,
-});
+if (!resendApiKey) {
+  console.warn("[Resend] No API key found. Set RESEND_API_KEY or SMTP_PASS environment variable.");
+}
 
-// Helper function to send emails (compatible with Resend API)
+// Create Resend client
+const resendClient = new Resend(resendApiKey);
+
+// Export compatible interface
 export const resend = {
   emails: {
     send: async (options: {
@@ -33,31 +20,52 @@ export const resend = {
       html: string;
     }) => {
       try {
-        // Handle both string and array for 'to' field
-        const toAddresses = Array.isArray(options.to)
-          ? options.to.join(", ")
-          : options.to;
+        if (!resendApiKey) {
+          console.error("[Resend] API key not configured");
+          return {
+            data: null,
+            error: {
+              message: "Resend API key not configured",
+              name: "config_error",
+            },
+          };
+        }
 
-        const info = await transporter.sendMail({
+        const result = await resendClient.emails.send({
           from: options.from,
-          to: toAddresses,
+          to: Array.isArray(options.to) ? options.to : [options.to],
           subject: options.subject,
           html: options.html,
         });
 
+        if (result.error) {
+          console.error("[Resend] Error:", result.error);
+          return {
+            data: null,
+            error: {
+              message: result.error.message,
+              name: result.error.name,
+            },
+          };
+        }
+
         return {
-          data: { id: info.messageId },
+          data: { id: result.data?.id },
           error: null,
         };
       } catch (error) {
+        console.error("[Resend] Exception:", error);
         return {
           data: null,
           error: {
             message: error instanceof Error ? error.message : "Unknown error",
-            name: "smtp_error",
+            name: "resend_error",
           },
         };
       }
     },
   },
 };
+
+// Also export the client directly for advanced usage
+export { resendClient };

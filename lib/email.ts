@@ -371,21 +371,6 @@ export async function sendEmail(to: string, subject: string, html: string) {
 
 export async function sendBulkEmail(data: BulkEmailData) {
   try {
-    // Check for SMTP configuration
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      console.error(
-        "SMTP credentials not configured - SMTP_USER or SMTP_PASS missing",
-      );
-      return {
-        success: false,
-        error:
-          "SMTP credentials not configured. Please set SMTP_USER and SMTP_PASS environment variables.",
-        sent: 0,
-        failed: data.recipients.length,
-        total: data.recipients.length,
-      };
-    }
-
     const siteSettings = await getSiteSettings();
     const appUrl =
       process.env.NEXT_PUBLIC_APP_URL ||
