@@ -104,8 +104,8 @@ export function LessonForm({ chapterId, data, courseId }: iAppProps) {
     try {
       const response = await fetch(`/api/admin/lessons/${data.id}/resources`);
       if (response.ok) {
-        const data = await response.json();
-        setResources(data);
+        const result = await response.json();
+        setResources(result.resources || []);
       }
     } catch (error) {
       console.error("Error fetching resources:", error);
