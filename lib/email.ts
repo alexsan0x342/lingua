@@ -409,7 +409,12 @@ export async function sendBulkEmail(data: BulkEmailData) {
     `;
 
     // Send emails sequentially with delay to avoid Resend rate limits (2/sec on free tier)
-    const results: Array<{ status: "fulfilled" | "rejected"; value?: { error?: { message: string } }; reason?: string; email: string }> = [];
+    const results: Array<{
+      status: "fulfilled" | "rejected";
+      value?: { error?: { message: string } };
+      reason?: string;
+      email: string;
+    }> = [];
 
     console.log(
       `[Email] Sending bulk email to ${data.recipients.length} recipients`,
@@ -431,21 +436,35 @@ export async function sendBulkEmail(data: BulkEmailData) {
         });
 
         if (result.error) {
-          console.error(`[Email] Error sending to ${recipient.email}:`, result.error);
-          results.push({ status: "rejected", reason: result.error.message, email: recipient.email });
+          console.error(
+            `[Email] Error sending to ${recipient.email}:`,
+            result.error,
+          );
+          results.push({
+            status: "rejected",
+            reason: result.error.message,
+            email: recipient.email,
+          });
         } else {
           console.log(`[Email] Sent to ${recipient.email}`);
-          results.push({ status: "fulfilled", value: result, email: recipient.email });
+          results.push({
+            status: "fulfilled",
+            value: result,
+            email: recipient.email,
+          });
         }
 
         // Add delay between emails to respect rate limits (500ms = 2 emails/sec)
         await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (error) {
-        console.error(`[Email] Exception sending to ${recipient.email}:`, error);
-        results.push({ 
-          status: "rejected", 
+        console.error(
+          `[Email] Exception sending to ${recipient.email}:`,
+          error,
+        );
+        results.push({
+          status: "rejected",
           reason: error instanceof Error ? error.message : "Unknown error",
-          email: recipient.email 
+          email: recipient.email,
         });
       }
     }
