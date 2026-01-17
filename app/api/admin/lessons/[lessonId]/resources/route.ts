@@ -8,7 +8,7 @@ import { hasDynamicPermission } from "@/lib/dynamic-rbac";
 // GET /api/admin/lessons/[lessonId]/resources - Get all resources for a lesson
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string }> }
+  { params }: { params: Promise<{ lessonId: string }> },
 ) {
   try {
     const session = await auth.api.getSession({
@@ -37,7 +37,7 @@ export async function GET(
     console.error("Error fetching resources:", error);
     return NextResponse.json(
       { error: "Failed to fetch resources" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -45,7 +45,7 @@ export async function GET(
 // POST /api/admin/lessons/[lessonId]/resources - Create a new resource
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string }> }
+  { params }: { params: Promise<{ lessonId: string }> },
 ) {
   try {
     const session = await auth.api.getSession({
@@ -92,7 +92,7 @@ export async function POST(
     console.error("Error creating resource:", error);
     return NextResponse.json(
       { error: "Failed to create resource" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

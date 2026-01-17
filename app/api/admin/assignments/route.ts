@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching assignments:", error);
     return NextResponse.json(
       { error: "Failed to fetch assignments" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
     if (!body.lessonId) {
       return NextResponse.json(
         { error: "Lesson ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     console.error("Error creating assignment:", error);
     return NextResponse.json(
       { error: "Failed to create assignment" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -131,7 +131,7 @@ export async function PUT(request: NextRequest) {
     if (!body.id) {
       return NextResponse.json(
         { error: "Assignment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -155,7 +155,7 @@ export async function PUT(request: NextRequest) {
     console.error("Error updating assignment:", error);
     return NextResponse.json(
       { error: "Failed to update assignment" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -183,7 +183,7 @@ export async function DELETE(request: NextRequest) {
     if (!id) {
       return NextResponse.json(
         { error: "Assignment ID is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -196,7 +196,7 @@ export async function DELETE(request: NextRequest) {
     console.error("Error deleting assignment:", error);
     return NextResponse.json(
       { error: "Failed to delete assignment" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

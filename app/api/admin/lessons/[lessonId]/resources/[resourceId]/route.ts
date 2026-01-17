@@ -8,7 +8,7 @@ import { hasDynamicPermission } from "@/lib/dynamic-rbac";
 // PUT /api/admin/lessons/[lessonId]/resources/[resourceId] - Update a resource
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string; resourceId: string }> }
+  { params }: { params: Promise<{ lessonId: string; resourceId: string }> },
 ) {
   try {
     const session = await auth.api.getSession({
@@ -49,7 +49,7 @@ export async function PUT(
     console.error("Error updating resource:", error);
     return NextResponse.json(
       { error: "Failed to update resource" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -57,7 +57,7 @@ export async function PUT(
 // DELETE /api/admin/lessons/[lessonId]/resources/[resourceId] - Delete a resource
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ lessonId: string; resourceId: string }> }
+  { params }: { params: Promise<{ lessonId: string; resourceId: string }> },
 ) {
   try {
     const session = await auth.api.getSession({
@@ -85,7 +85,7 @@ export async function DELETE(
     console.error("Error deleting resource:", error);
     return NextResponse.json(
       { error: "Failed to delete resource" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
